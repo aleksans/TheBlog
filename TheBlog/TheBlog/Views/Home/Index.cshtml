@@ -1,0 +1,18 @@
+﻿@model List<TheBlog.Model.Post>
+
+<div id="container">
+    <div class="row">
+        <div class="col-xs-12 col-sm-8 col-md-8 col-lg-8">
+            <div class="main section" id="main">
+                <div id="list-main">
+                    @foreach (var post in Model)
+                    {
+                        @Html.Partial("_PostTemplate", post)
+                    }
+
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -20,6 +20,7 @@ namespace TheBlog.DAL
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
+            Database.SetInitializer(new MigrateDatabaseToLatestVersion<BlogContext, DAL.Migrations.Configuration>());
             modelBuilder.Configurations.Add(new PostsMap());
         }
     }

@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
 
 namespace TheBlog.Model
 {
@@ -11,5 +11,7 @@ namespace TheBlog.Model
         public string ShortDescription { get; set; }
 
         public string FullDescription { get; set; }
+
+        public virtual ICollection<Tag> Tags { get; set; }
     }
 }

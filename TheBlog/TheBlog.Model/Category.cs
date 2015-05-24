@@ -2,14 +2,14 @@
 
 namespace TheBlog.Model
 {
-    public class Tag
+    public class Category
     {
-        public Tag()
+        public Category()
         {
             Posts = new HashSet<Post>();
         }
 
-        public int Id { get; set; }
+        public int CategoryId { get; set; }
 
         public string Name { get; set; }
 

@@ -3,26 +3,25 @@
 <div class="post-div">
 
     <h2 class="jqmaintitle">
-        Title
+        @Model.Title
     </h2>
     <div class="post-header-home">
         <span class="post-author vcard">
             <i class="fa fa-user"></i>
             <span class="glyphicon glyphicon-user"></span>
             <span class="fn">
-                Serhii A.
+               @Model.User.Username
             </span>
         </span>
     </div>
     <div class="homapge-thumb">
         <div class="post hentry" itemprop="blogPost" itemscope="itemscope" itemtype="http://schema.org/BlogPosting">
-
             <div>
                 <a href="http://simpleblogbt.blogspot.com/2014/02/familiar-for-me-but-which-leaf.html">
                     <span style="float: left; margin-right: 10px; width: 250px; height: 200px; background: url(http://3.bp.blogspot.com/-lwySqlD99X8/UySHFgLQtxI/AAAAAAAAAXM/wV_0QtuQlJU/s1600/mini-tumblr_n21m2rUrrD1st5lhmo1_1280.jpg) center 0 no-repeat transparent; background-size: 250px auto;"></span>
                 </a>
                 <div>
-                    Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem...
+                    @Model.ShortDescription
                 </div>
             </div>
             <div class="s-clear">
@@ -36,7 +35,7 @@
         <span class="post-timestamp">
             <i class="fa fa-clock-o"></i>
             <abbr class="published" title="2014-02-17T09:18:00-08:00">
-                Monday, February 23, 2015
+                @Model.AddedOn.ToString("dd/MM/yyyy hh:mm:ss")
             </abbr>
         </span>
     </div>

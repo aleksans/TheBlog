@@ -7,7 +7,7 @@ namespace TheBlog.DAL.Mappings
     {
         public PostsMap()
         {
-            HasKey(k => k.Id);
+            HasKey(k => k.PostId);
         }
     }
 }

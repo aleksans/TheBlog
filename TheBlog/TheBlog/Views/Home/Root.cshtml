@@ -1,15 +1,32 @@
 ﻿
 
-
 <div>
     Hello to the Administrator page1
 </div>
 
-<ul class="nav nav-tabs">
-    <li  class="active"><a href="#" data-toggle="tab">Posts</a>
-    
+<script>
+    $(document).ready(function () {
+        $('#accountTab a[href="#posts"]').tab('show');
+    });
+</script>
+
+<ul class="nav nav-tabs" role="tablist" id="accountTab">
+    <li>
+        <a href="#posts" role="tab" data-toggle="tab">Posts</a>
     </li>
-    <li  ><a href="#" data-toggle="tab">Categories</a></li>
-    <li  ><a href="#" data-toggle="tab">Tags</a></li>
+    <li><a href="#categories" role="tab" data-toggle="tab">Categories</a></li>
+    <li><a href="#tags" role="tab" data-toggle="tab">Tags</a></li>
 </ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active" id="posts">
+        <p>Here's where we'll put our post.</p>
+    </div>
+    <div class="tab-pane fade active" id="categories">
+        <p>Here's where we'll put our categories.</p>
+    </div>
+    <div class="tab-pane fade active" id="tags">
+        <p>Here's where we'll put our tags.</p>
+    </div>
+</div>
 

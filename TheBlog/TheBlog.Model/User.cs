@@ -15,6 +15,7 @@ namespace TheBlog.Model
 
         public string Username { get; set; }
 
+        [JsonIgnore]
         public string Password { get; set; }
 
         public string Email { get; set; }

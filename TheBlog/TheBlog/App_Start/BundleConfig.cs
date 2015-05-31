@@ -36,7 +36,7 @@ namespace TheBlog
                       "~/Content/bootstrap.css",
                       "~/Content/site.css",
                       "~/Content/jquery.jqGrid/ui.jqgrid.css",
-                      "~/Content/themes/base/jquery.ui*"));
+                      "~/Content/themes/base/jquery.ui.*"));
         }
     }
 }

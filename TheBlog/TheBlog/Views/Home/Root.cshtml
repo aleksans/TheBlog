@@ -2,7 +2,7 @@
     var TheBlog = {};
 
     TheBlog.GridManager = {
-        
+
         postsGrid: function (gridName, pagerName) {
             var columns = [];
             columns.push({
@@ -13,23 +13,80 @@
 
             columns.push({
                 name: 'Title',
-                index: 'Title'
+                index: 'Title',
+                width: 250,
+                editable: true,
+                editoptions: {
+                    size: 43,
+                    maxlength: 300
+                },
+                editrules: {
+                    required: true
+                }
             });
 
             columns.push({
                 name: 'ShortDescription',
+                width: 250,
                 sortable: false,
-                hidden: true
+                hidden: true,
+                editable: true,
+                edittype: 'textarea',
+                editoptions: {
+                    rows: "10",
+                    cols: "100"
+                },
+                editrules: {
+                    edithidden: true
+                }
             });
 
             columns.push({
                 name: 'Description',
                 sortable: false,
-                hidden: true
+                width: 250,
+                hidden: true,
+                editable: true,
+                edittype: 'textarea',
+              
+                editrules: {
+                    edithidden: true
+                }
             });
 
             columns.push({
-                name: 'CategoryId'
+                name: 'Category.Id',
+                hidden: true,
+                editable: true,
+                edittype: 'select',
+                editoptions: {
+                    style: 'width:250px;',
+                    dataUrl: '/root/GetCategoriesHtml'
+                },
+                editrules: {
+                    required: true,
+                    edithidden: true
+                }
+            });
+
+            columns.push({
+                name: 'Category.Name',
+                label: 'Category'
+            });
+
+            columns.push({
+                name: 'Tags',
+                width: 150,
+                editable: true,
+                edittype: 'select',
+                editoptions: {
+                    style: 'width:250px;',
+                    dataUrl: '/roots/GetTagsHtml',
+                    multiple: true
+                },
+                editrules: {
+                    required: true
+                }
             });
 
             columns.push({
@@ -41,9 +98,23 @@
             });
 
             columns.push({
-                name: 'UserId'
+                name: 'User.Username',
+                label: 'Username'
             });
-            
+
+            columns.push({
+                name: 'IsPublished',
+                index: 'IsPublished',
+                width: 100,
+                align: 'center',
+                editable: true,
+                edittype: 'checkbox',
+                editoptions: {
+                    value: "true:false",
+                    defaultValue: 'false'
+                }
+            });
+
             $(gridName).jqGrid({
                 url: '/root/Posts',
                 datatype: 'json',
@@ -66,8 +137,39 @@
                 // display the no. of records message
                 viewrecords: true,
 
-                jsonReader: { repeatitems: false }
+                jsonReader: { repeatitems: false },
+
+                afterInsertRow: function (rowid, rowdata, rowelem) {
+                    var tags = rowdata["Tags"];
+                    var tagStr = "";
+
+                    $.each(tags, function (i, t) {
+                        if (tagStr) tagStr += ", ";
+                        tagStr += t.Name;
+                    });
+
+                    $(gridName).setRowData(rowid, { "Tags": tagStr });
+                }
             });
+
+            var addOptions = {
+                url: '/Admin/AddPost',
+                addCaption: 'Add Post',
+                processData: "Saving...",
+                width: 900,
+                closeAfterAdd: true,
+                closeOnEscape: true
+            };
+
+            $(gridName).navGrid(pagerName,
+                                        { // settings
+                                            cloneToTop: true,
+                                            search: false
+                                        },
+                                        {}, // add options
+                                        addOptions, // edit options
+                                        {} // delete options
+            );
         },
 
         categoriesGrid: function (gridName, pagerName) {

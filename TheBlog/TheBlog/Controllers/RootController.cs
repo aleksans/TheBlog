@@ -30,14 +30,14 @@ namespace TheBlog.Controllers
             
             var posts = _context.Posts.ToList();
 
-            if (model.sidx != null)
-            {
-                model.page = 1;
-            }
-            else
-            {
-                //model. = currentFilter;
-            }
+            //if (model.sidx != null)
+            //{
+            //    model.page = 1;
+            //}
+            //else
+            //{
+            //    //model. = currentFilter;
+            //}
 
             //if (!String.IsNullOrEmpty(searchString))
             //{
@@ -58,21 +58,46 @@ namespace TheBlog.Controllers
             int pageNumber = model.page -1;
 
             posts = posts.Skip((pageNumber * pageSize)).Take(pageSize).ToList();
-            var postsCount = posts.Count();
-
-
-            return Content(JsonConvert.SerializeObject(new
+            var postsCount = _context.Posts.Count();
+            var content = Content(JsonConvert.SerializeObject(new
             {
                 page = pageNumber,
                 records = postsCount,
                 rows = posts,
                 total = Math.Ceiling(Convert.ToDouble(postsCount) / model.rows)
             }), "application/json");
+
+            return content;
         }
 
-        public int TotalPosts()
+        [HttpPost]
+        public ContentResult AddPost(Post post)
         {
-            return _context.Posts.Count();
+            string json;
+
+            if (ModelState.IsValid)
+            {
+                _context.Posts.Add(post);
+                _context.SaveChanges();
+
+                json = JsonConvert.SerializeObject(new
+                {
+                    id = post.PostId,
+                    success = true,
+                    message = "Post added successfully"
+                });
+            }
+            else
+            {
+                json = JsonConvert.SerializeObject(new
+                {
+                    id = 0,
+                    success = false,
+                    message = "Failed to add the post"
+                });
+            }
+
+            return Content(json, "application/json");
         }
     }
 }

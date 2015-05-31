@@ -15,7 +15,13 @@ namespace TheBlog
                         "~/Scripts/jquery.validate*"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryui").Include(
-                "~/Scripts/jquery-ui.js"));
+                "~/Scripts/jquery-ui.js")
+                .Include("~/Scripts/i18n/grid.locale-en.js")
+                .Include("~/Scripts/jquery.jqGrid.src.js")
+                .Include("~/Scripts/jquery.validate.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/commonjs").Include(
+                "~/Scripts/common/common.js"));
 
             // Use the development version of Modernizr to develop with and learn from. Then, when you're
             // ready for production, use the build tool at http://modernizr.com to pick only the tests you need.
@@ -28,7 +34,8 @@ namespace TheBlog
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
-                      "~/Content/site.css"));
+                      "~/Content/site.css",
+                      "~/Content/jquery.jqGrid/ui.jqgrid.css"));
         }
     }
 }

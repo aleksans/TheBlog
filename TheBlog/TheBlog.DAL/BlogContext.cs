@@ -12,11 +12,11 @@ namespace TheBlog.DAL
         {
         }
 
-        public DbSet<Post> Posts { get; set; }
-        public DbSet<Tag> Tags { get; set; }
-        public DbSet<User> Users { get; set; }
-        public DbSet<Category> Categories { get; set; }
-        public DbSet<Role> Roles { get; set; }
+        public IDbSet<Post> Posts { get; set; }
+        public IDbSet<Tag> Tags { get; set; }
+        public IDbSet<User> Users { get; set; }
+        public IDbSet<Category> Categories { get; set; }
+        public IDbSet<Role> Roles { get; set; }
 
         public new int SaveChanges()
         {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace TheBlog.Model
 {
@@ -24,10 +25,11 @@ namespace TheBlog.Model
 
         public int CategoryId { get; set; }
 
+        [JsonIgnore]
         public virtual ICollection<Tag> Tags { get; set; }
-
+        [JsonIgnore]
         public virtual User User { get; set; }
-
+        [JsonIgnore]
         public virtual Category Category { get; set; }
     }
 }

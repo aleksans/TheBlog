@@ -1,32 +1,138 @@
-﻿
+﻿<script>
+    var TheBlog = {};
 
-<div>
-    Hello to the Administrator page1
-</div>
+    TheBlog.GridManager = {
+        
+        postsGrid: function (gridName, pagerName) {
+            var columns = [];
+            columns.push({
+                name: 'Id',
+                key: true,
+                width: 20
+            });
 
-<script>
+            columns.push({
+                name: 'Title',
+                index: 'Title'
+            });
+
+            columns.push({
+                name: 'ShortDescription',
+                sortable: false,
+                hidden: true
+            });
+
+            columns.push({
+                name: 'Description',
+                sortable: false,
+                hidden: true
+            });
+
+            columns.push({
+                name: 'CategoryId'
+            });
+
+            columns.push({
+                name: 'AddedOn',
+                index: 'AddedOn',
+                width: 250,
+                align: 'center',
+                sorttype: 'date',
+                datefmt: 'm/d/Y'
+            });
+
+            columns.push({
+                name: 'UserId'
+            });
+            
+            $(gridName).jqGrid({
+                url: '/root/Posts',
+                datatype: 'json',
+                mtype: 'GET',
+
+                height: 'auto',
+
+               
+                colModel: columns,
+
+                toppager: true,
+                pager: pagerName,
+                rowNum: 10,
+                rowList: [10, 20, 30],
+
+                // row number column
+                rownumbers: true,
+                rownumWidth: 40,
+
+                // default sorting
+                sortname: 'AddedOn',
+                sortorder: 'desc',
+
+                // display the no. of records message
+                viewrecords: true,
+
+                jsonReader: { repeatitems: false }
+            });
+        },
+
+        categoriesGrid: function (gridName, pagerName) {
+        },
+
+        tagsGrid: function (gridName, pagerName) {
+        }
+    }
+
     $(document).ready(function () {
         $('#accountTab a[href="#posts"]').tab('show');
+        var currentTab = "";
+
+        $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+            var target = $(e.target).attr("href");
+            var gridManager = TheBlog.GridManager, fn, gridName, pagerName;
+
+            if (target !== currentTab) {
+                switch (target) {
+                    case "#posts":
+                        gridManager.postsGrid("#tablePosts", "#pagerPosts");
+
+                        break;
+                    case "#categories":
+                        fn = gridManager.categoriesGrid;
+                        gridName = "#tableCategories";
+                        pagerName = "#pagerCategories";
+                        break;
+                    case "tags":
+                        fn = gridManager.postsGrid;
+                        gridName = "#tableTags";
+                        pagerName = "#pagertags";
+                }
+                currentTab = target;
+            }
+        });
     });
 </script>
 
 <ul class="nav nav-tabs" role="tablist" id="accountTab">
-    <li>
-        <a href="#posts" role="tab" data-toggle="tab">Posts</a>
-    </li>
+    <li><a href="#posts" role="tab" data-toggle="tab">Posts</a></li>
     <li><a href="#categories" role="tab" data-toggle="tab">Categories</a></li>
     <li><a href="#tags" role="tab" data-toggle="tab">Tags</a></li>
 </ul>
 
 <div class="tab-content">
     <div class="tab-pane fade active" id="posts">
-        <p>Here's where we'll put our post.</p>
+        <table id="tablePosts" class="grid"></table>
+        <div id="pagerPosts" class="pager">
+        </div>
     </div>
     <div class="tab-pane fade active" id="categories">
-        <p>Here's where we'll put our categories.</p>
+        <table id="tableCats" class="grid"></table>
+        <div id="pagerCats" class="pager">
+        </div>
     </div>
     <div class="tab-pane fade active" id="tags">
-        <p>Here's where we'll put our tags.</p>
+        <table id="tableTags" class="grid"></table>
+        <div id="pagerTags" class="pager">
+        </div>
     </div>
 </div>
 

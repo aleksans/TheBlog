@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace TheBlog.Model
 {
@@ -26,6 +27,7 @@ namespace TheBlog.Model
 
         public Role Role { get; set; }
 
+        [JsonIgnore]
         public ICollection<Post> Posts { get; set; }
     }
 }

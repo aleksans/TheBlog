@@ -24,19 +24,20 @@
 
             var afterShowForm = function (form) {
                 tinyMCE.execCommand('mceAddEditor', false, "ShortDescription");
-                tinyMCE.execCommand('mceAddEditor', false, "Description");
+                tinyMCE.execCommand('mceAddEditor', false, "FullDescription");
             };
 
             var onClose = function (form) {
                 tinyMCE.execCommand('mceRemoveEditor', false, "ShortDescription");
-                tinyMCE.execCommand('mceRemoveEditor', false, "Description");
+                tinyMCE.execCommand('mceRemoveEditor', false, "FullDescription");
             };
 
             var columns = [];
             columns.push({
                 name: 'PostId',
-                key: true,
-                hidden: true
+                hidden: true,
+                editable: true,
+                key: true
             });
 
             columns.push({
@@ -77,7 +78,8 @@
             });
 
             columns.push({
-                name: 'Description',
+                name: 'FullDescription',
+                index: 'FullDescription',
                 sortable: false,
                 width: 250,
                 hidden: true,
@@ -91,7 +93,7 @@
                     custom: true,
 
                     custom_func: function (val, colname) {
-                        val = tinyMCE.get("Description").getContent();
+                        val = tinyMCE.get("FullDescription").getContent();
                         if (val) return [true, ""];
                         return [false, colname + ": Field is requred"];
                     },
@@ -100,8 +102,7 @@
             });
 
             columns.push({
-                name: 'Category.CategoryId',
-                label: "Category",
+                name: 'CategoryId',
                 hidden: true,
                 editable: true,
                 edittype: 'select',
@@ -203,7 +204,7 @@
                 if (selRowData["AddedOn"])
                     postdata.PostedOn = selRowData["AddedOn"];
                 postdata.ShortDescription = tinyMCE.get("ShortDescription").getContent();
-                postdata.FullDescription = tinyMCE.get("Description").getContent();
+                postdata.FullDescription = tinyMCE.get("FullDescription").getContent();
 
                 return [true];
             };
@@ -220,15 +221,37 @@
                 afterSubmit: TheBlog.GridManager.afterSubmitHandler,
                 beforeSubmit: beforeSubmitHandler
             };
+
+            var editOptions = {
+                url: '/root/EditPost',
+                addCaption: 'Edit Post',
+                processData: "Saving...",
+                width: 900,
+                closeAfterEdit: true,
+                closeOnEscape: true,
+                afterShowForm: afterShowForm,
+                onClose: onClose,
+                afterSubmit: TheBlog.GridManager.afterSubmitHandler,
+                beforeSubmit: beforeSubmitHandler
+            };
+
+            var deleteOptions = {
+                url: '/root/DeletePost',
+                caption: 'Delete Post',
+                processData: "Deleting...",
+                msg: "Are you sure?",
+                closeOnEscape: true,
+                afterSubmit: TheBlog.GridManager.afterSubmitHandler
+            };
             
             $(gridName).navGrid(pagerName,
                                         { // settings
                                             cloneToTop: true,
                                             search: false
                                         },
-                                        {}, // add options
-                                        addOptions, // edit options
-                                        {} // delete options
+                                        editOptions,
+                                        addOptions,
+                                        deleteOptions
             );
 
         },

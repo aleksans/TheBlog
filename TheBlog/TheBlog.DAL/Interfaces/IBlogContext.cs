@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using TheBlog.Model;
 
 namespace TheBlog.DAL.Interfaces
@@ -17,5 +18,7 @@ namespace TheBlog.DAL.Interfaces
         IDbSet<Role> Roles { get; set; }
 
         int SaveChanges();
+
+        DbEntityEntry Entry(object entity);
     }
 }

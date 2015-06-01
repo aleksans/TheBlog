@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Web.Mvc;
 using Newtonsoft.Json;
+using TheBlog.DAL;
 using TheBlog.DAL.Interfaces;
 using TheBlog.Model;
 
@@ -99,14 +101,16 @@ namespace TheBlog.Controllers
             return Content(json, "application/json");
         }
 
-        [HttpPost]
+         [HttpPost, ValidateInput(false)]
         public ContentResult EditPost(Post post)
         {
             string json;
+            ModelState.Clear();
 
-            if (ModelState.IsValid)
+            if (TryValidateModel(post))
             {
                 _context.Posts.Attach(post);
+                _context.Entry(post).State = EntityState.Modified;
                 _context.SaveChanges();
 
                 json = JsonConvert.SerializeObject(new
@@ -161,6 +165,35 @@ namespace TheBlog.Controllers
 
             sb.AppendLine("<select>");
             return Content(sb.ToString(), "text/html");
+        }
+
+        [HttpPost]
+        public ContentResult DeletePost(int id)
+        {
+            string json;
+            var post = _context.Posts.FirstOrDefault(x => x.PostId == id);
+            if (post != null)
+            {
+                _context.Posts.Remove(post);
+                _context.SaveChanges();
+                json = JsonConvert.SerializeObject(new
+                {
+                    id = 0,
+                    success = true,
+                    message = "Post deleted successfully."
+                });
+            }
+            else
+            {
+                json = JsonConvert.SerializeObject(new
+                {
+                    id = 0,
+                    success = true,
+                    message = "Post not found."
+                });
+            }
+
+            return Content(json, "application/json");
         }
     }
 }

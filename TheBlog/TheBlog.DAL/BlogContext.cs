@@ -1,4 +1,5 @@
 ﻿using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using TheBlog.DAL.Interfaces;
 using TheBlog.DAL.Mappings;
 using TheBlog.Model;
@@ -21,6 +22,11 @@ namespace TheBlog.DAL
         public new int SaveChanges()
         {
             return base.SaveChanges();
+        }
+
+        public new DbEntityEntry Entry(object entity)
+        {
+            return base.Entry(entity);
         }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)

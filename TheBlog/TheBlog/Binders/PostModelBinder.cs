@@ -26,7 +26,6 @@ namespace TheBlog.Binders
                 post.Category = _context.Categories.FirstOrDefault(x => x.CategoryId == post.Category.CategoryId);
 
             var tags = bindingContext.ValueProvider.GetValue("Tags").AttemptedValue.Split(',');
-
             if (tags.Length > 0)
             {
                 post.Tags = new List<Tag>();
@@ -38,7 +37,12 @@ namespace TheBlog.Binders
                 }
             }
             post.AddedOn = DateTime.Now;
-            post.User = _context.Users.FirstOrDefault();
+
+            if (post.User == null)
+            {
+                post.User = _context.Users.FirstOrDefault();
+                post.UserId = post.User.UserId;
+            }
 
             return post;
         }

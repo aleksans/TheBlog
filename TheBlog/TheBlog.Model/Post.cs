@@ -21,7 +21,7 @@ namespace TheBlog.Model
         [Required(ErrorMessage = "Description is mandatory")]
         public string ShortDescription { get; set; }
 
-        [Required(ErrorMessage = "FullDesctipntion is mandatory")]
+        [Required(ErrorMessage = "FullDescription is mandatory")]
         public string FullDescription { get; set; }
 
         [Required(ErrorMessage = "AddedOn date is mandatory")]

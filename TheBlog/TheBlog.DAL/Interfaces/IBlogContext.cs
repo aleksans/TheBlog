@@ -1,9 +1,10 @@
-﻿using System.Data.Entity;
+﻿using System;
+using System.Data.Entity;
 using TheBlog.Model;
 
 namespace TheBlog.DAL.Interfaces
 {
-    public interface IBlogContext
+    public interface IBlogContext : IDisposable
     {
         IDbSet<Post> Posts { get; set; }
 

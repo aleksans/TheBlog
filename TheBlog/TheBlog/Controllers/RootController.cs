@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
-using System.Web.Helpers;
+using System.Text;
 using System.Web.Mvc;
 using Newtonsoft.Json;
 using TheBlog.DAL.Interfaces;
@@ -12,7 +10,7 @@ namespace TheBlog.Controllers
 {
     public class RootController : Controller
     {
-        private IBlogContext _context;
+        private readonly IBlogContext _context;
 
         public RootController(IBlogContext blogContext)
         {
@@ -70,12 +68,13 @@ namespace TheBlog.Controllers
             return content;
         }
 
-        [HttpPost]
+        [HttpPost, ValidateInput(false)]
         public ContentResult AddPost(Post post)
         {
             string json;
-
-            if (ModelState.IsValid)
+            ModelState.Clear();
+            
+            if (TryValidateModel(post))
             {
                 _context.Posts.Add(post);
                 _context.SaveChanges();
@@ -98,6 +97,70 @@ namespace TheBlog.Controllers
             }
 
             return Content(json, "application/json");
+        }
+
+        [HttpPost]
+        public ContentResult EditPost(Post post)
+        {
+            string json;
+
+            if (ModelState.IsValid)
+            {
+                _context.Posts.Attach(post);
+                _context.SaveChanges();
+
+                json = JsonConvert.SerializeObject(new
+                {
+                    id = post.PostId,
+                    success = true,
+                    message = "Post added successfully"
+                });
+            }
+            else
+            {
+                json = JsonConvert.SerializeObject(new
+                {
+                    id = 0,
+                    success = false,
+                    message = "Failed to add the post"
+                });
+            }
+
+            return Content(json, "application/json");
+        }
+
+        public ContentResult GetCategoriesHtml()
+        {
+            var categories = _context.Categories.OrderBy(s => s.Name);
+
+            var sb = new StringBuilder();
+            sb.AppendLine(@"<select>");
+
+            foreach (var category in categories)
+            {
+                sb.AppendLine(string.Format(@"<option value=""{0}"">{1}</option>",
+                    category.CategoryId, category.Name));
+            }
+
+            sb.AppendLine("<select>");
+            return Content(sb.ToString(), "text/html");
+        }
+
+        public ContentResult GetTagsHtml()
+        {
+            var tags = _context.Tags.OrderBy(s => s.Name);
+
+            var sb = new StringBuilder();
+            sb.AppendLine(@"<select multiple=""multiple"">");
+
+            foreach (var tag in tags)
+            {
+                sb.AppendLine(string.Format(@"<option value=""{0}"">{1}</option>",
+                    tag.Id, tag.Name));
+            }
+
+            sb.AppendLine("<select>");
+            return Content(sb.ToString(), "text/html");
         }
     }
 }

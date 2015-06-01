@@ -46,7 +46,7 @@ namespace TheBlog.Controllers
             //_blogContext.Posts.Add(posts.First());
             //_blogContext.SaveChanges();
 
-            var anythyng = _blogContext.Posts.ToList();
+            var anythyng = _blogContext.Posts.OrderByDescending(x => x.AddedOn).ToList();
             ViewBag.Tags = _blogContext.Tags.Select(x => x.Name).ToList();
             ViewBag.Categories = _blogContext.Categories.Select(x => x.Name).ToList();
             //var result = _postRepository.GetAll();

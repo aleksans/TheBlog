@@ -20,6 +20,9 @@ namespace TheBlog
                 .Include("~/Scripts/jquery.jqGrid.src.js")
                 .Include("~/Scripts/jquery.validate.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/tinymce")
+                .Include("~/Scripts/tinymce/tiny_mce.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/commonjs").Include(
                 "~/Scripts/common/common.js"));
 

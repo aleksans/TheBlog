@@ -1,23 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Web.Mvc;
-using TheBlog.DAL.Interfaces;
-using TheBlog.Model;
-using TheBlog.Repository.Interfaces;
+using TheBlog.Service.Interfaces;
 
 namespace TheBlog.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly IPostRepository _postRepository;
-        private readonly IBlogContext _blogContext;
 
+        private readonly IPostService _postService;
+        private readonly ITagService _tagService;
+        private readonly ICategoryService _categoryService;
 
-        public HomeController(IBlogContext blogContext)
+        public HomeController(IPostService postService, ITagService tagService, ICategoryService categoryService)
         {
-            //_postRepository = postRepository;
-            _blogContext = blogContext;
+            _postService = postService;
+            _tagService = tagService;
+            _categoryService = categoryService;
         }
 
         public ActionResult Index()
@@ -46,9 +44,9 @@ namespace TheBlog.Controllers
             //_blogContext.Posts.Add(posts.First());
             //_blogContext.SaveChanges();
 
-            var anythyng = _blogContext.Posts.OrderByDescending(x => x.AddedOn).ToList();
-            ViewBag.Tags = _blogContext.Tags.Select(x => x.Name).ToList();
-            ViewBag.Categories = _blogContext.Categories.Select(x => x.Name).ToList();
+            var anythyng = _postService.GetAll().OrderByDescending(x => x.AddedOn).ToList();
+            ViewBag.Tags = _tagService.GetAll().Select(x => x.Name).ToList();
+            ViewBag.Categories = _categoryService.GetAll().Select(x => x.Name).ToList();
             //var result = _postRepository.GetAll();
             //var newpost = new Post
             //{

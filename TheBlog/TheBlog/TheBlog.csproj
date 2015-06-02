@@ -618,9 +618,9 @@
       <Project>{02FF40B6-3DCD-4148-807F-355F18342874}</Project>
       <Name>TheBlog.Model</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\TheBlog\TheBlog\TheBlog.Repository\TheBlog.Repository.csproj">
-      <Project>{6F872EB2-62DB-4278-A146-6C19BA38825C}</Project>
-      <Name>TheBlog.Repository</Name>
+    <ProjectReference Include="..\TheBlog.Service\TheBlog.Service.csproj">
+      <Project>{FB7FA5AF-0C96-4F69-8AC1-79E86145BCF6}</Project>
+      <Name>TheBlog.Service</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

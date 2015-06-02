@@ -4,19 +4,22 @@ using System.Linq;
 using System.Text;
 using System.Web.Mvc;
 using Newtonsoft.Json;
-using TheBlog.DAL;
-using TheBlog.DAL.Interfaces;
 using TheBlog.Model;
+using TheBlog.Service.Interfaces;
 
 namespace TheBlog.Controllers
 {
     public class RootController : Controller
     {
-        private readonly IBlogContext _context;
+        private readonly IPostService _postService;
+        private readonly ITagService _tagService;
+        private readonly ICategoryService _categoryService;
 
-        public RootController(IBlogContext blogContext)
+        public RootController(IPostService postService, ITagService tagService, ICategoryService categoryService)
         {
-            _context = blogContext;
+            _postService = postService;
+            _tagService = tagService;
+            _categoryService = categoryService;
         }
 
         // GET: Root
@@ -27,8 +30,8 @@ namespace TheBlog.Controllers
 
         public ContentResult Posts(GridModel model)
         {
-            
-            var posts = _context.Posts.ToList();
+
+            var posts = _postService.GetAll().ToList();
 
             //if (model.sidx != null)
             //{
@@ -58,7 +61,7 @@ namespace TheBlog.Controllers
             int pageNumber = model.page -1;
 
             posts = posts.Skip((pageNumber * pageSize)).Take(pageSize).ToList();
-            var postsCount = _context.Posts.Count();
+            var postsCount = _postService.Count();
             var content = Content(JsonConvert.SerializeObject(new
             {
                 page = pageNumber,
@@ -78,8 +81,7 @@ namespace TheBlog.Controllers
             
             if (TryValidateModel(post))
             {
-                _context.Posts.Add(post);
-                _context.SaveChanges();
+                _postService.AddPost(post);
 
                 json = JsonConvert.SerializeObject(new
                 {
@@ -109,9 +111,7 @@ namespace TheBlog.Controllers
 
             if (TryValidateModel(post))
             {
-                _context.Posts.Attach(post);
-                _context.Entry(post).State = EntityState.Modified;
-                _context.SaveChanges();
+                _postService.UpdatePost(post);
 
                 json = JsonConvert.SerializeObject(new
                 {
@@ -135,7 +135,7 @@ namespace TheBlog.Controllers
 
         public ContentResult GetCategoriesHtml()
         {
-            var categories = _context.Categories.OrderBy(s => s.Name);
+            var categories = _categoryService.GetAll().OrderBy(s => s.Name);
 
             var sb = new StringBuilder();
             sb.AppendLine(@"<select>");
@@ -152,7 +152,7 @@ namespace TheBlog.Controllers
 
         public ContentResult GetTagsHtml()
         {
-            var tags = _context.Tags.OrderBy(s => s.Name);
+            var tags = _tagService.GetAll().OrderBy(s => s.Name);
 
             var sb = new StringBuilder();
             sb.AppendLine(@"<select multiple=""multiple"">");
@@ -171,11 +171,9 @@ namespace TheBlog.Controllers
         public ContentResult DeletePost(int id)
         {
             string json;
-            var post = _context.Posts.FirstOrDefault(x => x.PostId == id);
-            if (post != null)
+            var result = _postService.DeletePost(id);
+            if (result)
             {
-                _context.Posts.Remove(post);
-                _context.SaveChanges();
                 json = JsonConvert.SerializeObject(new
                 {
                     id = 0,
